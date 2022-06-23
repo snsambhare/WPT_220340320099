@@ -1,0 +1,96 @@
+<html>
+<body>
+
+<span>Book ID</span>
+<input type="number" id="bid" name="bookid" placeholder="Enter Book Id"/>
+<span id="msg">Message</span><br><br>
+<span>Book Name</span>
+<input type="text" id="bname" name="bookname" placeholder="Enter Book Name"><br><br>
+<span>Price</span>
+<input type="text" id="pr" name="price" placeholder="Price"><br><br>
+<button id="addbtn">Add a book</button><br><br>
+<button id="showall">Show all books Here</button><br><br>
+<span id="msg2"></span>
+
+
+</body>
+
+<script src="jquery-3.5.1.min.js"></script>
+<script>//our scrip will come here 
+
+
+
+$(document).ready(()=>{
+	$("#addbtn").click(()=> 
+		{ 
+			console.log("jquery works");
+				let input={bookid:$("#bid").val(), bookname:$("#bname").val(), price:$("#pr").val()}
+
+			let ajaxparams={	
+						data:input,
+						type: "get",
+						dataType: "json",
+						url: "http://localhost:8081/addbook",
+						
+						success:(datafromserver)=> {
+
+							if(datafromserver==true){
+								$("#msg").html("Added successful");
+								console.log("Book Added successful");
+							}
+							else{
+								$("#msg").html("Book additon failed");
+							}
+						}
+						,
+						error:(error)=>{
+							console.log("error");
+						}
+					};
+					$.ajax(ajaxparams);
+
+
+			
+		});
+
+
+		$("#showall").click(()=> 
+		{ 
+			console.log("jquery works");
+				let input={}
+
+			let ajaxparams={	
+						data:input,
+						type: "get",
+						dataType: "json",
+						url: "http://localhost:8081/showallbooks",
+						
+						success:(input)=> {
+							console.log(input.length);
+							if(input.length>0){
+								// console.log(input[0]);
+
+								let string="";
+								for(let i=0;i<input.length;i++){
+									string+="BookId="+input[i].id+" "+",Book Name="+input[i].name+" "+",Book Price="+input[i].cost+" "+"<br>";
+								};
+								$("#msg2").html(string);
+									
+							}
+						}
+						,
+						error:(error)=>{
+							console.log("error");
+						}
+					};
+					$.ajax(ajaxparams);
+
+					
+			
+		});
+})
+
+</script>
+
+
+</html>
